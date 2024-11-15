@@ -32,7 +32,9 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "react-native-safe-area-context",
+      "react-native-reanimated"
     ],
     "experiments": {
       "typedRoutes": true
