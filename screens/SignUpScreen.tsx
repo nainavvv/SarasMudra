@@ -1,35 +1,43 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
   Image,
-  SafeAreaView,
+  ScrollView,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
 
 export default function SignUpScreen() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const navigation = useNavigation<NavigationProp>();
+
+  const handleSubmit = () => {
+    console.log('Submit:', { email, phoneNumber });
+    navigation.navigate('logo');
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <ScrollView style={styles.container}>
+      <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/hands-icon.png')}
-          style={styles.logo}
+          source={require('../assets/hands-logo.png')}
+          style={styles.logoImage}
         />
-        <Text style={styles.brandName}>SarasMudra</Text>
-        <Text style={styles.subTitle}>BY SATHUMANS</Text>
+        <Text style={styles.logoText}>SarasMudra</Text>
+        <Text style={styles.subLogoText}>BY SATHUMANS</Text>
       </View>
 
       <View style={styles.formContainer}>
         <Text style={styles.title}>Sign Up</Text>
-        
+
         <View style={styles.inputContainer}>
+          <MaterialCommunityIcons name="email-outline" size={24} color="#000" />
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -38,6 +46,10 @@ export default function SignUpScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
           />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons name="phone" size={24} color="#000" />
           <TextInput
             style={styles.input}
             placeholder="Phone Number"
@@ -47,7 +59,7 @@ export default function SignUpScreen() {
           />
         </View>
 
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
 
@@ -68,12 +80,12 @@ export default function SignUpScreen() {
 
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => router.push('/(tabs)')}>
+          <TouchableOpacity>
             <Text style={styles.loginLink}>Log in</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
@@ -82,67 +94,67 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  header: {
+  logoContainer: {
+    backgroundColor: '#FFE4B5',
+    padding: 20,
     alignItems: 'center',
-    marginTop: 40,
   },
-  logo: {
+  logoImage: {
     width: 60,
     height: 40,
     resizeMode: 'contain',
   },
-  brandName: {
+  logoText: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: 'bold',
     color: '#000',
-    marginTop: 10,
   },
-  subTitle: {
+  subLogoText: {
     fontSize: 12,
     color: '#666',
-    letterSpacing: 1,
+    letterSpacing: 2,
   },
   formContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    marginTop: 40,
-    paddingHorizontal: 20,
+    padding: 20,
   },
   title: {
     fontSize: 28,
-    fontWeight: '600',
-    color: '#000',
+    fontWeight: 'bold',
     marginBottom: 30,
+    textAlign: 'center',
   },
   inputContainer: {
-    backgroundColor: '#FFF7D6',
-    borderRadius: 25,
-    padding: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
     marginBottom: 20,
+    paddingHorizontal: 10,
   },
   input: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     fontSize: 16,
   },
   submitButton: {
     backgroundColor: '#000',
-    borderRadius: 25,
     padding: 15,
-    alignItems: 'center',
-    marginTop: 10,
+    borderRadius: 25,
+    marginTop: 20,
   },
   submitButtonText: {
     color: '#fff',
+    textAlign: 'center',
     fontSize: 18,
     fontWeight: '600',
   },
   socialContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 40,
+    marginTop: 30,
     gap: 20,
   },
   socialButton: {
@@ -156,15 +168,14 @@ const styles = StyleSheet.create({
   loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 40,
+    marginTop: 30,
   },
   loginText: {
-    color: '#000',
     fontSize: 16,
+    color: '#000',
   },
   loginLink: {
-    color: '#3498db',
     fontSize: 16,
-    fontWeight: '600',
+    color: '#007AFF',
   },
 });
