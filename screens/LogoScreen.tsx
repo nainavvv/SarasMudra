@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFE4B5',
+    backgroundColor: '#FCDA79',
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 400,
+    height: 400,
     resizeMode: 'contain',
   },
 });

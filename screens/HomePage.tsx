@@ -120,7 +120,7 @@ export default function HomePage() {
         <TouchableOpacity style={styles.navItem}>
           <HomeIcon />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('indian-sign-language')}>
           <GraduationCapIcon />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#FFE4B5',
+    backgroundColor: '#FCDA79',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   enterButton: {
-    backgroundColor: '#FFE4B5',
+    backgroundColor: '#FCDA79',
     paddingHorizontal: 24,
     paddingVertical: 8,
     borderRadius: 20,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   readButton: {
-    backgroundColor: '#FFE4B5',
+    backgroundColor: '#FCDA79',
     paddingHorizontal: 24,
     paddingVertical: 8,
     borderRadius: 20,

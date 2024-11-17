@@ -29,8 +29,7 @@ export default function SignUpScreen() {
           source={require('../assets/hands-logo.png')}
           style={styles.logoImage}
         />
-        <Text style={styles.logoText}>SarasMudra</Text>
-        <Text style={styles.subLogoText}>BY SATHUMANS</Text>
+
       </View>
 
       <View style={styles.formContainer}>
@@ -95,24 +94,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logoContainer: {
-    backgroundColor: '#FFE4B5',
+    backgroundColor: '#FCDA79',
     padding: 20,
     alignItems: 'center',
   },
   logoImage: {
-    width: 60,
-    height: 40,
+    width: 270,
+    height: 80,
     resizeMode: 'contain',
-  },
-  logoText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  subLogoText: {
-    fontSize: 12,
-    color: '#666',
-    letterSpacing: 2,
   },
   formContainer: {
     flex: 1,

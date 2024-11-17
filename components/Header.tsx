@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFE4B5',
+    backgroundColor: '#FCDA79',
   },
   logo: {
     width: 270,
