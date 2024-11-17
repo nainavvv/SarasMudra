@@ -8,6 +8,12 @@ export type RootStackParamList = {
   'deaf-mute-questions': undefined;
   'non-deaf-mute-questions': undefined;
   home: undefined;
+  'indian-sign-language': undefined;
+  'speech-therapy': undefined;
+  'comm-screen': undefined;
+  opportunities: undefined;
+  dictionary: undefined;
+  'story-of-the-month': undefined;
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

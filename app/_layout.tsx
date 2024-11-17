@@ -34,6 +34,12 @@ export default function RootLayout() {
         <Stack.Screen name="deaf-mute-questions" options={{ headerShown: false }} />
         <Stack.Screen name="non-deaf-mute-questions" options={{ headerShown: false }} />
         <Stack.Screen name="home" options={{ headerShown: false }} />
+        <Stack.Screen name="indian-sign-language" options={{ headerShown: false }} />
+        <Stack.Screen name="SpeechTherapy" options={{ headerShown: false }} />
+        <Stack.Screen name="CommScreen" options={{ headerShown: false  }} />
+        <Stack.Screen name="Opportunities" options={{ headerShown: false }} />
+        <Stack.Screen name="Dictionary" options={{headerShown: false  }} />
+        <Stack.Screen name="StoryOfTheMonth" options={{headerShown: false  }} />
       </Stack>
     </ThemeProvider>
   );
