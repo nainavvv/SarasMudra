@@ -17,8 +17,8 @@ const LearnIcon = () => (
   <Text style={{fontSize: 24}}>📚</Text>
 );
 
-const UserIcon = () => (
-  <Text style={{fontSize: 24}}>👤</Text>
+const DictionaryIcon = () => (
+  <Text style={{fontSize: 24}}>📖</Text>
 );
 const videos: Video[] = [
   { id: '1', title: 'Introduction to Speech Therapy', thumbnail: require('../assets/video1.mp4') },
@@ -64,9 +64,9 @@ export default function SpeechTherapyScreen() {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-        >
-          <UserIcon/>
-          <Text style={styles.navText}>Profile</Text>
+          onPress={() => navigation.navigate('dictionary')}>
+          <DictionaryIcon/>
+          <Text style={styles.navText}>Dictionary</Text>
         </TouchableOpacity>
       </View>
       </SafeAreaView>

@@ -29,7 +29,7 @@ export default function BasicCourseScreen() {
   const { courseId, courseTitle } = route.params as { courseId: string; courseTitle: string };
 
   const lessons = [
-    { id: '1', title: 'Alphabets', icon: '🔤', progress: 0, unlocked: true },
+    { id: '1', title: 'Alphabets', icon: '🔤', progress: 100, unlocked: true },
     { id: '2', title: 'Numbers', icon: '🔢', progress: 0, unlocked: false },
     { id: '3', title: 'Greetings 1', icon: '👋', progress: 0, unlocked: false },
     { id: '4', title: 'Weather', icon: '☁️', progress: 0, unlocked: false },
@@ -51,28 +51,11 @@ export default function BasicCourseScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      
-      <View style={styles.rewardsBar}>
-        <View style={styles.rewardItem}>
-          <Text style={{fontSize: 20}}>💎</Text>
-          <Text style={styles.rewardText}>Rewards</Text>
-        </View>
-        <View style={styles.rewardItem}>
-          <Text style={{fontSize: 20}}>❤️</Text>
-          <Text style={styles.rewardText}>3</Text>
-        </View>
-        <View style={styles.rewardItem}>
-          <Text style={{fontSize: 20}}>🌟</Text>
-          <Text style={styles.rewardText}>200</Text>
-        </View>
-      </View>
-
       <View style={styles.levelContainer}>
         <TouchableOpacity style={styles.levelButton}>
           <Text style={styles.levelText}>{courseTitle}</Text>
         </TouchableOpacity>
       </View>
-
       <ScrollView style={styles.lessonsContainer}>
         {lessons.map((lesson) => (
           <TouchableOpacity 
@@ -91,12 +74,10 @@ export default function BasicCourseScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
       <View style={styles.bottomNav}>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('home')}
-        >
+          onPress={() => navigation.navigate('home')}>
           <HomeIcon />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
@@ -106,8 +87,7 @@ export default function BasicCourseScreen() {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('dictionary')}
-        >
+          onPress={() => navigation.navigate('dictionary')}>
           <DictionaryIcon />
           <Text style={styles.navText}>Dictionary</Text>
         </TouchableOpacity>
@@ -120,23 +100,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  rewardsBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  rewardItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  rewardText: {
-    fontSize: 16,
-    fontWeight: '500',
   },
   levelContainer: {
     alignItems: 'center',

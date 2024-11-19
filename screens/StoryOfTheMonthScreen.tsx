@@ -1,9 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image,SafeAreaView ,TouchableOpacity} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
+import Header from '../components/Header';
+
+const HomeIcon = () => (
+  <Text style={{fontSize: 24}}>🏠</Text>
+);
+
+const LearnIcon = () => (
+  <Text style={{fontSize: 24}}>📚</Text>
+);
+
+const DictionaryIcon = () => (
+  <Text style={{fontSize: 24}}>📖</Text>
+);
 
 export default function StoryOfTheMonthScreen() {
+  const navigation = useNavigation<NavigationProp>();
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header/>
+      <ScrollView style={styles.content}>
       <Text style={styles.header}>Story of the Month</Text>
       <Image
         source={require('../assets/story-image.png')}
@@ -22,14 +40,41 @@ export default function StoryOfTheMonthScreen() {
         Today, Sarah continues to advocate for deaf athletes and works to improve accessibility in sports programs worldwide. Her journey from a young deaf girl with a dream to an Olympic champion has touched the hearts of millions and continues to inspire future generations of athletes to pursue their passions, regardless of the challenges they may face.
       </Text>
     </ScrollView>
+    
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+          <TouchableOpacity style={styles.navItem}
+          onPress={() => navigation.navigate('home')}
+          >
+          <HomeIcon />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}
+        onPress={() => navigation.navigate('indian-sign-language')}>
+          <LearnIcon />
+          <Text style={styles.navText}>Learn</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => navigation.navigate('dictionary')}>
+          <DictionaryIcon/>
+          <Text style={styles.navText}>Dictionary</Text>
+        </TouchableOpacity>
+      </View>
+      </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    fontSize: 16,
+    lineHeight: 24,
   },
   header: {
     fontSize: 24,
@@ -47,8 +92,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 12,
   },
-  content: {
-    fontSize: 16,
-    lineHeight: 24,
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    backgroundColor: '#fff',
+  },
+  navItem: {
+    alignItems: 'center',
+  },
+  activeNavItem: {
+    opacity: 1,
+  },
+  navText: {
+    fontSize: 12,
+    marginTop: 4,
+    color: '#666',
+  },
+  activeNavText: {
+    color: '#FCDA79',
   },
 });

@@ -87,7 +87,7 @@ export default function AlphabetLessonScreen() {
         source={alphabetImages[alphabets[currentIndex]]}
         style={styles.alphabetImage}
       />
-      <Text style={styles.alphabetText}>{alphabets[currentIndex]}</Text>
+    
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
@@ -144,11 +144,6 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     height: width * 0.8,
     resizeMode: 'contain',
-  },
-  alphabetText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    marginTop: 20,
   },
   nextButton: {
     backgroundColor: '#FCDA79',

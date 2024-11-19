@@ -30,8 +30,8 @@ const LearnIcon = () => (
   <Text style={{fontSize: 24}}>📚</Text>
 );
 
-const UserIcon = () => (
-  <Text style={{fontSize: 24}}>👤</Text>
+const DictionaryIcon = () => (
+  <Text style={{fontSize: 24}}>📖</Text>
 );
 const ngos: NGO[] = [
   { id: '1', name: 'Deaf Aid Society', address: '123 Main St, City', phone: '+1234567890', website: 'https://deafaidsociety.org' },
@@ -77,9 +77,10 @@ export default function CommScreen() {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
+          onPress={()=> navigation.navigate('dictionary')}
         >
-          <UserIcon/>
-          <Text style={styles.navText}>Profile</Text>
+          <DictionaryIcon/>
+          <Text style={styles.navText}>Dictionary</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

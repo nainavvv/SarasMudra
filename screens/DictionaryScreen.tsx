@@ -16,9 +16,7 @@ const LearnIcon = () => (
   <Text style={{fontSize: 24}}>📚</Text>
 );
 
-const UserIcon = () => (
-  <Text style={{fontSize: 24}}>👤</Text>
-);
+
 const dictionaryData: DictionaryItem[] = [
   { id: '1', word: 'Hello', definition: 'A greeting or salutation' },
   { id: '2', word: 'Thank you', definition: 'An expression of gratitude' },
@@ -69,12 +67,7 @@ export default function DictionaryScreen() {
           <LearnIcon />
           <Text style={styles.navText}>Learn</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-        >
-          <UserIcon/>
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
+        
       </View>
     </SafeAreaView>
   );

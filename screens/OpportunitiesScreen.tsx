@@ -17,8 +17,8 @@ const LearnIcon = () => (
   <Text style={{fontSize: 24}}>📚</Text>
 );
 
-const UserIcon = () => (
-  <Text style={{fontSize: 24}}>👤</Text>
+const DictionaryIcon = () => (
+  <Text style={{fontSize: 24}}>📖</Text>
 );
 const jobs: Job[] = [
   { id: '1', title: 'Sign Language Interpreter', company: 'ABC Corp', location: 'New York, NY' },
@@ -67,9 +67,9 @@ export default function OpportunitiesScreen() {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-        >
-          <UserIcon/>
-          <Text style={styles.navText}>Profile</Text>
+          onPress={() => navigation.navigate('dictionary')}>
+          <DictionaryIcon/>
+          <Text style={styles.navText}>Dictionary</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
