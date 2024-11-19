@@ -40,6 +40,8 @@ export default function RootLayout() {
         <Stack.Screen name="Opportunities" options={{ headerShown: false }} />
         <Stack.Screen name="Dictionary" options={{headerShown: false  }} />
         <Stack.Screen name="StoryOfTheMonth" options={{headerShown: false  }} />
+        <Stack.Screen name="basic-course" options={{headerShown: false  }}  />
+        <Stack.Screen name="alphabet-lesson" options={{headerShown: false  }} />
       </Stack>
     </ThemeProvider>
   );
