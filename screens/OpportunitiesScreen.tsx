@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
 import Header from '../components/Header';
 type Job = {
   id: string;
@@ -7,7 +9,17 @@ type Job = {
   company: string;
   location: string;
 };
+const HomeIcon = () => (
+  <Text style={{fontSize: 24}}>🏠</Text>
+);
 
+const LearnIcon = () => (
+  <Text style={{fontSize: 24}}>📚</Text>
+);
+
+const UserIcon = () => (
+  <Text style={{fontSize: 24}}>👤</Text>
+);
 const jobs: Job[] = [
   { id: '1', title: 'Sign Language Interpreter', company: 'ABC Corp', location: 'New York, NY' },
   { id: '2', title: 'Deaf Education Teacher', company: 'XYZ School', location: 'Los Angeles, CA' },
@@ -15,6 +27,7 @@ const jobs: Job[] = [
 ];
 
 export default function OpportunitiesScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const renderJobItem = ({ item }: { item: Job }) => (
     <TouchableOpacity style={styles.jobItem}>
       <Text style={styles.jobTitle}>{item.title}</Text>
@@ -24,7 +37,11 @@ export default function OpportunitiesScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+ 
+      <Header/>
+      <View style={styles.container}>
+      <View style={styles.content}>
       <Text style={styles.header}>Job Opportunities</Text>
       <FlatList
         data={jobs}
@@ -32,14 +49,41 @@ export default function OpportunitiesScreen() {
         keyExtractor={item => item.id}
       />
     </View>
+    </View>
+    
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+          <TouchableOpacity style={styles.navItem}
+          onPress={() => navigation.navigate('home')}
+          >
+          <HomeIcon />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}
+        onPress={() => navigation.navigate('indian-sign-language')}>
+          <LearnIcon />
+          <Text style={styles.navText}>Learn</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.navItem}
+        >
+          <UserIcon/>
+          <Text style={styles.navText}>Profile</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
   },
   header: {
     fontSize: 24,
@@ -64,5 +108,29 @@ const styles = StyleSheet.create({
   jobLocation: {
     fontSize: 14,
     color: '#666',
+  },
+  
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    backgroundColor: '#fff',
+  },
+  navItem: {
+    alignItems: 'center',
+  },
+  activeNavItem: {
+    opacity: 1,
+  },
+  navText: {
+    fontSize: 12,
+    marginTop: 4,
+    color: '#666',
+  },
+  activeNavText: {
+    color: '#FCDA79',
   },
 });

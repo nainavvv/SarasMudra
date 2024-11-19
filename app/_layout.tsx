@@ -35,11 +35,11 @@ export default function RootLayout() {
         <Stack.Screen name="non-deaf-mute-questions" options={{ headerShown: false }} />
         <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="indian-sign-language" options={{ headerShown: false }} />
-        <Stack.Screen name="SpeechTherapy" options={{ headerShown: false }} />
-        <Stack.Screen name="CommScreen" options={{ headerShown: false  }} />
-        <Stack.Screen name="Opportunities" options={{ headerShown: false }} />
-        <Stack.Screen name="Dictionary" options={{headerShown: false  }} />
-        <Stack.Screen name="StoryOfTheMonth" options={{headerShown: false  }} />
+        <Stack.Screen name="speech-therapy" options={{ headerShown: false }} />
+        <Stack.Screen name="comm-screen" options={{ headerShown: false  }} />
+        <Stack.Screen name="opportunities" options={{ headerShown: false }} />
+        <Stack.Screen name="dictionary" options={{headerShown: false  }} />
+        <Stack.Screen name="story-of-the-month" options={{headerShown: false  }} />
         <Stack.Screen name="basic-course" options={{headerShown: false  }}  />
         <Stack.Screen name="alphabet-lesson" options={{headerShown: false  }} />
       </Stack>

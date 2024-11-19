@@ -16,13 +16,12 @@ import Header from '../components/Header';
 const SearchIcon = () => (
   <Text style={{fontSize: 20}}>🔍</Text>
 );
-
 const HomeIcon = () => (
   <Text style={{fontSize: 24}}>🏠</Text>
 );
 
-const GraduationCapIcon = () => (
-  <Text style={{fontSize: 24}}>🎓</Text>
+const LearnIcon = () => (
+  <Text style={{fontSize: 24}}>📚</Text>
 );
 
 const UserIcon = () => (
@@ -116,15 +115,23 @@ export default function HomePage() {
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
+          <View style={styles.bottomNav}>
+          <TouchableOpacity style={[styles.navItem, styles.activeNavItem]}
+          onPress={() => navigation.navigate('home')}
+          >
           <HomeIcon />
+          <Text style={[styles.navText, styles.activeNavText]}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('indian-sign-language')}>
-          <GraduationCapIcon />
+        <TouchableOpacity style={styles.navItem}
+        onPress={() => navigation.navigate('indian-sign-language')}>
+          <LearnIcon />
+          <Text style={styles.navText}>Learn</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <UserIcon />
+        <TouchableOpacity 
+          style={styles.navItem}
+        >
+          <UserIcon/>
+          <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -258,6 +265,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   navItem: {
-    padding: 8,
+    alignItems: 'center',
+  },
+  activeNavItem: {
+    opacity: 1,
+  },
+  navText: {
+    fontSize: 12,
+    marginTop: 4,
+    color: '#666',
+  },
+  activeNavText: {
+    color: '#FCDA79',
   },
 });

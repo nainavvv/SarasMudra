@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity , SafeAreaView} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
 import Header from '../components/Header';
 type DictionaryItem = {
   id: string;
   word: string;
   definition: string;
 };
+const HomeIcon = () => (
+  <Text style={{fontSize: 24}}>🏠</Text>
+);
 
+const LearnIcon = () => (
+  <Text style={{fontSize: 24}}>📚</Text>
+);
+
+const UserIcon = () => (
+  <Text style={{fontSize: 24}}>👤</Text>
+);
 const dictionaryData: DictionaryItem[] = [
   { id: '1', word: 'Hello', definition: 'A greeting or salutation' },
   { id: '2', word: 'Thank you', definition: 'An expression of gratitude' },
@@ -14,6 +26,7 @@ const dictionaryData: DictionaryItem[] = [
 ];
 
 export default function DictionaryScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredData = dictionaryData.filter(item =>
@@ -26,9 +39,10 @@ export default function DictionaryScreen() {
       <Text style={styles.definition}>{item.definition}</Text>
     </View>
   );
-
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header/>
+    <View style={styles.content}>
       <Text style={styles.header}>SarasDictionary</Text>
       <TextInput
         style={styles.searchInput}
@@ -42,14 +56,38 @@ export default function DictionaryScreen() {
         keyExtractor={item => item.id}
       />
     </View>
+     {/* Bottom Navigation */}
+     <View style={styles.bottomNav}>
+          <TouchableOpacity style={styles.navItem}
+          onPress={() => navigation.navigate('home')}
+          >
+          <HomeIcon />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}
+        onPress={() => navigation.navigate('indian-sign-language')}>
+          <LearnIcon />
+          <Text style={styles.navText}>Learn</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.navItem}
+        >
+          <UserIcon/>
+          <Text style={styles.navText}>Profile</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
   },
   header: {
     fontSize: 24,
@@ -75,5 +113,29 @@ const styles = StyleSheet.create({
   },
   definition: {
     fontSize: 14,
+  },
+  
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    backgroundColor: '#fff',
+  },
+  navItem: {
+    alignItems: 'center',
+  },
+  activeNavItem: {
+    opacity: 1,
+  },
+  navText: {
+    fontSize: 12,
+    marginTop: 4,
+    color: '#666',
+  },
+  activeNavText: {
+    color: '#FCDA79',
   },
 });
