@@ -27,18 +27,19 @@ export default function StoryOfTheMonthScreen() {
         source={require('../assets/story-image.png')}
         style={styles.storyImage}
       />
-      <Text style={styles.title}>Overcoming Challenges: A Deaf Athlete's Journey to Olympic Gold</Text>
-      <Text style={styles.content}>
-        In this inspiring story, we follow the journey of Sarah Thompson, a deaf athlete who defied all odds to win an Olympic gold medal in swimming. Born profoundly deaf, Sarah faced numerous challenges throughout her life, but her determination and passion for swimming never wavered.
+ <Text style={styles.title}>Kishore Saini: A Deaf Entrepreneur Changing Lives</Text>
+<Text style={styles.content}>
+  Kishore Saini, a resident of New Delhi, was born deaf. Despite facing immense challenges in accessing quality education and job opportunities, he refused to let his disability define his potential. After completing his education at a special school, he decided to empower others like him.
 
-        From a young age, Sarah's parents encouraged her to pursue her dreams, enrolling her in swimming lessons and supporting her competitive spirit. As she progressed in her swimming career, Sarah had to overcome communication barriers with coaches and teammates, often relying on visual cues and lip-reading to follow instructions.
+  In 2015, Kishore started his own small business in the tailoring industry. His workshop employs only individuals with hearing impairments, giving them a platform to earn a livelihood and prove their capabilities. He provides on-the-job training in tailoring, pattern design, and customer service, ensuring his employees gain valuable skills.
 
-        Despite these obstacles, Sarah's talent and hard work caught the attention of national selectors, and she was chosen to represent her country in the Olympics. Through rigorous training and unwavering dedication, Sarah not only qualified for the finals but also set a new world record in the 100-meter freestyle event, clinching the gold medal.
+  Under Kishore’s leadership, the business grew steadily, and his team’s work gained recognition for its quality and professionalism. Today, his workshop is not just a workplace but a community of individuals who share, support, and inspire one another. Kishore also collaborates with NGOs to spread awareness and advocate for more inclusive policies in the labor market.
 
-        Sarah's victory serves as an inspiration to the deaf community and beyond, proving that with determination and support, any barrier can be overcome. Her story highlights the importance of inclusivity in sports and the power of perseverance in the face of adversity.
+  This story reflects the resilience and creativity of the deaf and mute community in India, as well as the potential for inclusive employment to change lives. It’s a reminder that with determination and the right support, barriers can be overcome, and great achievements can be realized.
 
-        Today, Sarah continues to advocate for deaf athletes and works to improve accessibility in sports programs worldwide. Her journey from a young deaf girl with a dream to an Olympic champion has touched the hearts of millions and continues to inspire future generations of athletes to pursue their passions, regardless of the challenges they may face.
-      </Text>
+  Kishore’s success has inspired other deaf entrepreneurs and promoted a shift in how society views the abilities of individuals with disabilities. His story highlights the importance of inclusion and empowerment, showing how one person’s efforts can transform the lives of many.
+</Text>
+
     </ScrollView>
     
       {/* Bottom Navigation */}

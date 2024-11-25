@@ -1,43 +1,42 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function SignUpScreen() {
+export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const router = useRouter();
-  const { signUp } = useAuth();
+  const navigation = useNavigation<NavigationProp>();
+  const { signIn } = useAuth();
 
-  const handleSignUp = async () => {
-    if (email === '' || password === '' || confirmPassword === '') {
+  const handleLogin = async () => {
+    if (email === '' || password === '') {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
-    }
-
     try {
-      await signUp(email, password);
-      router.push('/language');
+      await signIn(email, password);
+      console.log('User logged in:', email);
+      navigation.navigate('home');
     } catch (error) {
-      console.error('Error signing up:', error);
-      Alert.alert('Error', 'Failed to sign up. Please try again.');
+      console.error('Error logging in:', error);
+      Alert.alert('Error', 'Failed to log in. Please try again.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.title}>Log In</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(text) => {
+          setEmail(text);
+          console.log('Login - Email entered:', text);
+        }}
         keyboardType="email-address"
         autoCapitalize="none"
       />
@@ -45,21 +44,17 @@ export default function SignUpScreen() {
         style={styles.input}
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(text) => {
+          setPassword(text);
+          console.log('Login - Password entered');
+        }}
         secureTextEntry
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push('/login')}>
-        <Text style={styles.linkText}>Already have an account? Log In</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('signup')}>
+        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

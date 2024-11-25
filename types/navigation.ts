@@ -3,6 +3,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 export type RootStackParamList = {
   index: undefined;
   logo: undefined;
+  signup: undefined;
+  login: undefined;
   language: undefined;
   community: undefined;
   'deaf-mute-questions': undefined;
@@ -16,6 +18,7 @@ export type RootStackParamList = {
   'story-of-the-month': undefined;
   'basic-course': { courseId: string; courseTitle: string };
   'alphabet-lesson': undefined;
+  'alphabet-quiz': undefined;
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

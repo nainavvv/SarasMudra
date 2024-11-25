@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { AuthProvider } from '../contexts/AuthContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -25,10 +26,13 @@ export default function RootLayout() {
   }
 
   return (
+    <AuthProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="logo" options={{ headerShown: false }} />
+        <Stack.Screen name="login"options={{ headerShown: false }}  />
+        <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="language" options={{ headerShown: false }} />
         <Stack.Screen name="community" options={{ headerShown: false }} />
         <Stack.Screen name="deaf-mute-questions" options={{ headerShown: false }} />
@@ -42,7 +46,9 @@ export default function RootLayout() {
         <Stack.Screen name="story-of-the-month" options={{headerShown: false  }} />
         <Stack.Screen name="basic-course" options={{headerShown: false  }}  />
         <Stack.Screen name="alphabet-lesson" options={{headerShown: false  }} />
+        <Stack.Screen name="alphabet-quiz" options={{headerShown: false  }} />
       </Stack>
     </ThemeProvider>
+    </AuthProvider>
   );
 }
