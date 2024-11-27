@@ -47,6 +47,10 @@ export default function RootLayout() {
         <Stack.Screen name="basic-course" options={{headerShown: false  }}  />
         <Stack.Screen name="alphabet-lesson" options={{headerShown: false  }} />
         <Stack.Screen name="alphabet-quiz" options={{headerShown: false  }} />
+        <Stack.Screen name="number-lesson" options={{headerShown: false  }} />
+        <Stack.Screen name="number-quiz" options={{headerShown: false  }} />
+        <Stack.Screen name="basics1-lesson" options={{headerShown: false  }} />
+        <Stack.Screen name="basics1-quiz" options={{headerShown: false  }} />
       </Stack>
     </ThemeProvider>
     </AuthProvider>

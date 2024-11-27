@@ -9,66 +9,85 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
-import { NavigationProp } from '../types/navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
+
 const HomeIcon = () => (
   <Text style={{fontSize: 24}}>🏠</Text>
 );
+
 const LearnIcon = () => (
   <Text style={{fontSize: 24}}>📚</Text>
 );
+
 const DictionaryIcon = () => (
   <Text style={{fontSize: 24}}>📖</Text>
 );
+
 const BrainIcon = () => (
   <Text style={{fontSize: 24}}>🧠</Text>
 );
+
 const initialLessons = [
   { id: '1', title: 'Alphabets', icon: '🔤', progress: 0, unlocked: true, arrows: 'right' },
   { id: '2', title: 'Numbers', icon: '🔢', progress: 0, unlocked: false, arrows: 'left' },
-  { id: '3', title: 'Greetings 1', icon: '👋', progress: 0, unlocked: false, arrows: 'right' },
+  { id: '3', title: 'Basics 1', icon: '👋', progress: 0, unlocked: false, arrows: 'right' },
   { id: '4', title: 'Weather', icon: '☁️', progress: 0, unlocked: false, arrows: 'left' },
   { id: '5', title: 'Calendar', icon: '📅', progress: 0, unlocked: false, arrows: 'right' },
   { id: '6', title: 'Colors', icon: '🎨', progress: 0, unlocked: false, arrows: 'left' },
 ];
+
 export default function BasicCourseScreen() {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation();
   const route = useRoute();
-  const { courseId, courseTitle } = route.params as { courseId: string; courseTitle: string };
+  const { courseId, courseTitle } = route.params;
   const [lessons, setLessons] = useState(initialLessons);
+
   useFocusEffect(
     React.useCallback(() => {
       loadProgress();
     }, [])
   );
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       loadProgress();
     });
     return unsubscribe;
   }, [navigation]);
+
   const loadProgress = async () => {
     try {
       const savedProgress = await AsyncStorage.getItem('lessonProgress');
       if (savedProgress !== null) {
         setLessons(JSON.parse(savedProgress));
+      } else {
+        // If no progress is saved, initialize with default lessons
+        await AsyncStorage.setItem('lessonProgress', JSON.stringify(initialLessons));
       }
     } catch (error) {
       console.error('Error loading progress:', error);
+      Alert.alert("Error", "Failed to load lesson progress. Please restart the app.");
     }
   };
+
   const saveProgress = async (updatedLessons) => {
     try {
       await AsyncStorage.setItem('lessonProgress', JSON.stringify(updatedLessons));
     } catch (error) {
       console.error('Error saving progress:', error);
+      Alert.alert("Error", "Failed to save progress. Please try again.");
     }
   };
-  const handleLessonPress = (lesson) => {
+
+  const handleLessonPress = (lesson, index) => {
     if (lesson.unlocked) {
       if (lesson.title === 'Alphabets') {
         navigation.navigate('alphabet-lesson');
+      } else if (lesson.title === 'Numbers') {
+        navigation.navigate('number-lesson');
+      }else if (lesson.title === 'Basics 1') {
+        navigation.navigate('basics1-lesson');
       } else {
         // Navigate to other lesson types when implemented
         console.log(`Navigating to ${lesson.title} lesson`);
@@ -77,26 +96,21 @@ export default function BasicCourseScreen() {
       Alert.alert('Lesson Locked', 'Complete the previous lesson to unlock this one.');
     }
   };
-  const handleQuizPress = (lessonTitle: string) => {
-    const lessonIndex = lessons.findIndex(lesson => lesson.title === lessonTitle);
-    if (lessonIndex !== -1 && lessons[lessonIndex].unlocked) {
+
+  const handleQuizPress = (lessonTitle, index) => {
+    if (lessons[index].unlocked) {
       if (lessonTitle === 'Alphabets') {
-        navigation.navigate('alphabet-quiz', { lessonIndex });
+        navigation.navigate('alphabet-quiz', { lessonIndex: index });
+      } else if (lessonTitle === 'Numbers') {
+        navigation.navigate('number-quiz', { lessonIndex: index });
+      } else if (lessonTitle === 'Basics 1') {
+        navigation.navigate('basics1-quiz', { lessonIndex: index });
       } else {
         console.log(`Opening quiz for ${lessonTitle}`);
       }
     } else {
       Alert.alert('Quiz Locked', 'Complete the lesson to access the quiz.');
     }
-  };
-  const handleQuizComplete = (lessonIndex: number, score: number) => {
-    const updatedLessons = [...lessons];
-    updatedLessons[lessonIndex].progress = score;
-    if (lessonIndex + 1 < updatedLessons.length) {
-      updatedLessons[lessonIndex + 1].unlocked = true;
-    }
-    setLessons(updatedLessons);
-    saveProgress(updatedLessons);
   };
 
   return (
@@ -108,13 +122,13 @@ export default function BasicCourseScreen() {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.lessonsContainer}>
-        {lessons.map((lesson) => (
+        {lessons.map((lesson, index) => (
           <View key={lesson.id} style={styles.lessonRow}>
             {lesson.arrows === 'left' && (
               <>
                 <TouchableOpacity 
                   style={styles.brainButton} 
-                  onPress={() => handleQuizPress(lesson.title)}
+                  onPress={() => handleQuizPress(lesson.title, index)}
                 >
                   <BrainIcon />
                 </TouchableOpacity>
@@ -124,7 +138,7 @@ export default function BasicCourseScreen() {
             <View style={styles.lessonItemWrapper}>
               <TouchableOpacity 
                 style={styles.lessonItem} 
-                onPress={() => handleLessonPress(lesson)}
+                onPress={() => handleLessonPress(lesson, index)}
                 disabled={!lesson.unlocked}
               >
                 <View style={[styles.lessonCircle, lesson.unlocked ? styles.activeLesson : styles.lockedLesson]}>
@@ -135,14 +149,13 @@ export default function BasicCourseScreen() {
                 </View>
                 <Text style={[styles.lessonText, !lesson.unlocked && styles.lockedText]}>{lesson.title}</Text>
               </TouchableOpacity>
-            
             </View>
             {lesson.arrows === 'right' && (
               <>
                 <Text style={styles.arrows}>{'>>>'}</Text>
                 <TouchableOpacity 
                   style={styles.brainButton} 
-                  onPress={() => handleQuizPress(lesson.title)}
+                  onPress={() => handleQuizPress(lesson.title, index)}
                 >
                   <BrainIcon />
                 </TouchableOpacity>
@@ -154,7 +167,8 @@ export default function BasicCourseScreen() {
       <View style={styles.bottomNav}>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('home')}>
+          onPress={() => navigation.navigate('home')}
+        >
           <HomeIcon />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
@@ -164,7 +178,8 @@ export default function BasicCourseScreen() {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('dictionary')}>
+          onPress={() => navigation.navigate('dictionary')}
+        >
           <DictionaryIcon />
           <Text style={styles.navText}>Dictionary</Text>
         </TouchableOpacity>
@@ -254,19 +269,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FF6B6B',
   },
-  quizButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#FCDA79',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 5,
-  },
-  quizButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -291,3 +293,4 @@ const styles = StyleSheet.create({
     color: '#FCDA79',
   },
 });
+

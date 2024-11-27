@@ -2,73 +2,61 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  Image,
   Alert,
+  Dimensions,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from '../components/Header';
 
-// Import all images statically
-const alphabetImages = {
-  a: require('../assets/images/a1.png'),
-  b: require('../assets/images/b1.png'),
-  c: require('../assets/images/c1.png'),
-  d: require('../assets/images/d1.png'),
-  e: require('../assets/images/e1.png'),
-  f: require('../assets/images/f1.png'),
-  g: require('../assets/images/g1.png'),
-  h: require('../assets/images/h1.png'),
-  i: require('../assets/images/i1.png'),
-  j: require('../assets/images/j1.png'),
-  k: require('../assets/images/k1.png'),
-  l: require('../assets/images/l1.png'),
-  m: require('../assets/images/m1.png'),
-  n: require('../assets/images/n1.png'),
-  o: require('../assets/images/o1.png'),
-  p: require('../assets/images/p1.png'),
-  q: require('../assets/images/q1.png'),
-  r: require('../assets/images/r1.png'),
-  s: require('../assets/images/s1.png'),
-  t: require('../assets/images/t1.png'),
-  u: require('../assets/images/u1.png'),
-  v: require('../assets/images/v1.png'),
-  w: require('../assets/images/w1.png'),
-  x: require('../assets/images/x1.png'),
-  y: require('../assets/images/y1.png'),
-  z: require('../assets/images/z1.png'),
-};
+const { width } = Dimensions.get('window');
 
-const getRandomLetter = (exclude: string) => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let randomLetter;
-  do {
-    randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-  } while (randomLetter === exclude);
-  return randomLetter;
+const basics1Images = {
+  '0': { image: require('../assets/images/namaste.png'), text: 'Namaste' },
+  '1': { image: require('../assets/images/hello.png'), text: 'Hello' },
+  '2': { image: require('../assets/images/name-what.png'), text: 'What is your name?' },
+  '3': { image: require('../assets/images/name.png'), text: 'My name is...' },
+  '4': { image: require('../assets/images/you-okay.png'), text: 'Are you okay?' },
+  '5': { image: require('../assets/images/fine.png'), text: 'I am fine' },
+  '6': { image: require('../assets/images/thanks.png'), text: 'Thank you' },
+  '7': { image: require('../assets/images/please.png'), text: 'Please' },
+  '8': { image: require('../assets/images/sorry.png'), text: 'Sorry' },
+  '9': { image: require('../assets/images/excuse-me.png'), text: 'Excuse me' },
+  '!': { image: require('../assets/images/man.png'), text: 'Man' },
+  '@': { image: require('../assets/images/woman.png'), text: 'Woman' },
 };
 
 const generateQuestions = () => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  return alphabet.split('').map((letter) => ({
-    id: letter,
-    question: `What is the sign for letter ${letter}?`,
-    options: [
-      { id: 'a', image: alphabetImages[letter.toLowerCase()], letter: letter },
-      { id: 'b', image: alphabetImages[getRandomLetter(letter).toLowerCase()], letter: getRandomLetter(letter) },
-      { id: 'c', image: alphabetImages[getRandomLetter(letter).toLowerCase()], letter: getRandomLetter(letter) },
-      { id: 'd', image: alphabetImages[getRandomLetter(letter).toLowerCase()], letter: getRandomLetter(letter) },
-    ],
-    correctAnswer: 'a',
+  return Object.entries(basics1Images).map(([key, value]) => ({
+    id: key,
+    image: value.image,
+    question: 'What does this image represent?',
+    options: shuffle([
+      value.text,
+      ...Object.values(basics1Images)
+        .filter(item => item.text !== value.text)
+        .map(item => item.text)
+        .slice(0, 3)
+    ]),
+    correctAnswer: value.text,
   }));
 };
 
-const allQuestions = generateQuestions();
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
 
-export default function AlphabetQuizScreen() {
-  const navigation = useNavigation();
+export default function Basics1QuizScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const route = useRoute();
   const { lessonIndex } = route.params;
   const [questions, setQuestions] = useState([]);
@@ -77,16 +65,11 @@ export default function AlphabetQuizScreen() {
   const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
-    // Shuffle and select 20 questions
-    const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-    setQuestions(shuffled.slice(0, 20));
+    setQuestions(shuffle(generateQuestions()));
   }, []);
 
-  const handleAnswer = (selectedOption: string) => {
-    const currentQuestionData = questions[currentQuestion];
-    const selectedLetter = currentQuestionData.options.find(opt => opt.id === selectedOption)?.letter;
-    
-    if (selectedLetter === currentQuestionData.id) {
+  const handleAnswer = (selectedAnswer: string) => {
+    if (selectedAnswer === questions[currentQuestion].correctAnswer) {
       setScore(score + 1);
     }
 
@@ -105,35 +88,21 @@ export default function AlphabetQuizScreen() {
         const lessons = JSON.parse(savedProgress);
         lessons[lessonIndex].progress = finalScore;
         
-        // Unlock the Numbers lesson if score is at least 17 (85%)
-        if (finalScore >= 85 && lessonIndex + 1 < lessons.length) {
+        if (lessonIndex + 1 < lessons.length) {
           lessons[lessonIndex + 1].unlocked = true;
           lessons[lessonIndex + 1].progress = 0;
         }
         
         await AsyncStorage.setItem('lessonProgress', JSON.stringify(lessons));
-        
-        // Show an alert to inform the user about unlocking the next lesson
-        if (finalScore >= 85) {
-          Alert.alert(
-            "Congratulations!",
-            "You've unlocked the Numbers lesson!",
-            [{ text: "OK", onPress: () => navigation.goBack() }]
-          );
-        } else {
-          navigation.goBack();
-        }
       }
     } catch (error) {
       console.error('Error saving progress:', error);
-      Alert.alert("Error", "Failed to save progress. Please try again.");
     }
+    navigation.goBack();
   };
 
   const handleRetry = () => {
-    // Reshuffle questions
-    const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-    setQuestions(shuffled.slice(0, 20));
+    setQuestions(shuffle(generateQuestions()));
     setCurrentQuestion(0);
     setScore(0);
     setShowResult(false);
@@ -142,6 +111,7 @@ export default function AlphabetQuizScreen() {
   if (showResult) {
     return (
       <SafeAreaView style={styles.container}>
+        <Header />
         <View style={styles.resultContainer}>
           <Text style={styles.resultTitle}>Quiz Complete!</Text>
           <Text style={styles.resultScore}>
@@ -164,6 +134,7 @@ export default function AlphabetQuizScreen() {
   if (questions.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
+        <Header />
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading questions...</Text>
         </View>
@@ -173,21 +144,26 @@ export default function AlphabetQuizScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header />
       <View style={styles.questionContainer}>
         <Text style={styles.questionNumber}>
           Question {currentQuestion + 1}/{questions.length}
         </Text>
+        <Image 
+          source={questions[currentQuestion].image} 
+          style={styles.questionImage}
+        />
         <Text style={styles.questionText}>
           {questions[currentQuestion].question}
         </Text>
         <View style={styles.optionsContainer}>
-          {questions[currentQuestion].options.map((option) => (
+          {questions[currentQuestion].options.map((option, index) => (
             <TouchableOpacity
-              key={option.id}
+              key={index}
               style={styles.optionButton}
-              onPress={() => handleAnswer(option.id)}
+              onPress={() => handleAnswer(option)}
             >
-              <Image source={option.image} style={styles.optionImage} />
+              <Text style={styles.optionText}>{option}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -199,7 +175,7 @@ export default function AlphabetQuizScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
   },
   questionContainer: {
     flex: 1,
@@ -212,6 +188,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
+  questionImage: {
+    width: width * 0.8,
+    height: width * 0.8,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   questionText: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -219,24 +202,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   optionsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 20,
+    alignItems: 'center',
   },
   optionButton: {
-    width: '45%',
-    aspectRatio: 1,
     backgroundColor: '#E6E6FA',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-  },
-  optionImage: {
+    marginBottom: 10,
     width: '80%',
-    height: '80%',
-    resizeMode: 'contain',
+  },
+  optionText: {
+    fontSize: 18,
+    textAlign: 'center',
   },
   resultContainer: {
     flex: 1,
@@ -279,3 +257,4 @@ const styles = StyleSheet.create({
     color: '#666',
   },
 });
+

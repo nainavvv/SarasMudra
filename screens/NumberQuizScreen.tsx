@@ -12,54 +12,36 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import all images statically
-const alphabetImages = {
-  a: require('../assets/images/a1.png'),
-  b: require('../assets/images/b1.png'),
-  c: require('../assets/images/c1.png'),
-  d: require('../assets/images/d1.png'),
-  e: require('../assets/images/e1.png'),
-  f: require('../assets/images/f1.png'),
-  g: require('../assets/images/g1.png'),
-  h: require('../assets/images/h1.png'),
-  i: require('../assets/images/i1.png'),
-  j: require('../assets/images/j1.png'),
-  k: require('../assets/images/k1.png'),
-  l: require('../assets/images/l1.png'),
-  m: require('../assets/images/m1.png'),
-  n: require('../assets/images/n1.png'),
-  o: require('../assets/images/o1.png'),
-  p: require('../assets/images/p1.png'),
-  q: require('../assets/images/q1.png'),
-  r: require('../assets/images/r1.png'),
-  s: require('../assets/images/s1.png'),
-  t: require('../assets/images/t1.png'),
-  u: require('../assets/images/u1.png'),
-  v: require('../assets/images/v1.png'),
-  w: require('../assets/images/w1.png'),
-  x: require('../assets/images/x1.png'),
-  y: require('../assets/images/y1.png'),
-  z: require('../assets/images/z1.png'),
+const numberImages = {
+  0: require('../assets/images/0.png'),
+  1: require('../assets/images/1.png'),
+  2: require('../assets/images/2.png'),
+  3: require('../assets/images/3.png'),
+  4: require('../assets/images/4.png'),
+  5: require('../assets/images/5.png'),
+  6: require('../assets/images/6.png'),
+  7: require('../assets/images/7.png'),
+  8: require('../assets/images/8.png'),
+  9: require('../assets/images/9.png'),
 };
 
-const getRandomLetter = (exclude: string) => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let randomLetter;
+const getRandomNumber = (exclude: number) => {
+  let randomNumber;
   do {
-    randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-  } while (randomLetter === exclude);
-  return randomLetter;
+    randomNumber = Math.floor(Math.random() * 10);
+  } while (randomNumber === exclude);
+  return randomNumber;
 };
 
 const generateQuestions = () => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  return alphabet.split('').map((letter) => ({
-    id: letter,
-    question: `What is the sign for letter ${letter}?`,
+  return Array.from({ length: 10 }, (_, i) => ({
+    id: i,
+    question: `What is the sign for number ${i}?`,
     options: [
-      { id: 'a', image: alphabetImages[letter.toLowerCase()], letter: letter },
-      { id: 'b', image: alphabetImages[getRandomLetter(letter).toLowerCase()], letter: getRandomLetter(letter) },
-      { id: 'c', image: alphabetImages[getRandomLetter(letter).toLowerCase()], letter: getRandomLetter(letter) },
-      { id: 'd', image: alphabetImages[getRandomLetter(letter).toLowerCase()], letter: getRandomLetter(letter) },
+      { id: 'a', image: numberImages[i], number: i },
+      { id: 'b', image: numberImages[getRandomNumber(i)], number: getRandomNumber(i) },
+      { id: 'c', image: numberImages[getRandomNumber(i)], number: getRandomNumber(i) },
+      { id: 'd', image: numberImages[getRandomNumber(i)], number: getRandomNumber(i) },
     ],
     correctAnswer: 'a',
   }));
@@ -67,7 +49,7 @@ const generateQuestions = () => {
 
 const allQuestions = generateQuestions();
 
-export default function AlphabetQuizScreen() {
+export default function NumberQuizScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { lessonIndex } = route.params;
@@ -77,16 +59,15 @@ export default function AlphabetQuizScreen() {
   const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
-    // Shuffle and select 20 questions
     const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-    setQuestions(shuffled.slice(0, 20));
+    setQuestions(shuffled);
   }, []);
 
   const handleAnswer = (selectedOption: string) => {
     const currentQuestionData = questions[currentQuestion];
-    const selectedLetter = currentQuestionData.options.find(opt => opt.id === selectedOption)?.letter;
+    const selectedNumber = currentQuestionData.options.find(opt => opt.id === selectedOption)?.number;
     
-    if (selectedLetter === currentQuestionData.id) {
+    if (selectedNumber === currentQuestionData.id) {
       setScore(score + 1);
     }
 
@@ -105,24 +86,19 @@ export default function AlphabetQuizScreen() {
         const lessons = JSON.parse(savedProgress);
         lessons[lessonIndex].progress = finalScore;
         
-        // Unlock the Numbers lesson if score is at least 17 (85%)
-        if (finalScore >= 85 && lessonIndex + 1 < lessons.length) {
+        // Unlock the next lesson if it exists
+        if (lessonIndex + 1 < lessons.length) {
           lessons[lessonIndex + 1].unlocked = true;
           lessons[lessonIndex + 1].progress = 0;
         }
         
         await AsyncStorage.setItem('lessonProgress', JSON.stringify(lessons));
         
-        // Show an alert to inform the user about unlocking the next lesson
-        if (finalScore >= 85) {
-          Alert.alert(
-            "Congratulations!",
-            "You've unlocked the Numbers lesson!",
-            [{ text: "OK", onPress: () => navigation.goBack() }]
-          );
-        } else {
-          navigation.goBack();
-        }
+        Alert.alert(
+          "Quiz Completed",
+          `Your score: ${finalScore}%`,
+          [{ text: "OK", onPress: () => navigation.goBack() }]
+        );
       }
     } catch (error) {
       console.error('Error saving progress:', error);
@@ -131,9 +107,8 @@ export default function AlphabetQuizScreen() {
   };
 
   const handleRetry = () => {
-    // Reshuffle questions
     const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-    setQuestions(shuffled.slice(0, 20));
+    setQuestions(shuffled);
     setCurrentQuestion(0);
     setScore(0);
     setShowResult(false);
@@ -279,3 +254,4 @@ const styles = StyleSheet.create({
     color: '#666',
   },
 });
+
