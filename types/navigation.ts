@@ -18,7 +18,7 @@ export type RootStackParamList = {
   'story-of-the-month': undefined;
   'basic-course': { courseId: string; courseTitle: string };
   'alphabet-lesson': undefined;
-  'alphabet-quiz': undefined;
+  'alphabet-quiz': {lessonIndex: number};
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../types/navigation';
 import { useAuth } from '../contexts/AuthContext';
+import auth from '@react-native-firebase/auth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ export default function LoginScreen() {
     }
 
     try {
-      await signIn(email, password);
+      await auth().signInWithEmailAndPassword(email, password);
       console.log('User logged in:', email);
       navigation.navigate('home');
     } catch (error) {

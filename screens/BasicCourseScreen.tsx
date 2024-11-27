@@ -58,14 +58,14 @@ export default function BasicCourseScreen() {
       console.error('Error loading progress:', error);
     }
   };
-  const saveProgress = async (updatedLessons) => {
+  const saveProgress = async (updatedLessons:any) => {
     try {
       await AsyncStorage.setItem('lessonProgress', JSON.stringify(updatedLessons));
     } catch (error) {
       console.error('Error saving progress:', error);
     }
   };
-  const handleLessonPress = (lesson) => {
+  const handleLessonPress = (lesson:any) => {
     if (lesson.unlocked) {
       if (lesson.title === 'Alphabets') {
         navigation.navigate('alphabet-lesson');
