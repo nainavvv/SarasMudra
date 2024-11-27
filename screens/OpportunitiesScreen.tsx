@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView ,Linking} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../types/navigation';
 import Header from '../components/Header';
 type Job = {
   id: string;
   title: string;
-  company: string;
+  description: string;
   location: string;
+  website: string;
 };
 const HomeIcon = () => (
   <Text style={{fontSize: 24}}>🏠</Text>
@@ -21,9 +22,9 @@ const DictionaryIcon = () => (
   <Text style={{fontSize: 24}}>📖</Text>
 );
 const jobs: Job[] = [
-  { id: '1', title: 'Sign Language Interpreter', company: 'ABC Corp', location: 'New York, NY' },
-  { id: '2', title: 'Deaf Education Teacher', company: 'XYZ School', location: 'Los Angeles, CA' },
-  { id: '3', title: 'Accessibility Consultant', company: 'Tech Solutions', location: 'San Francisco, CA' },
+    { id: '1', title: 'Sign Language Interpreter', description: 'SignAble Communications', location: 'Remote/India', website: 'https://signable.live/career-jobs-for-the-deaf' },
+    { id: '2', title: 'Deaf Education Teacher', description: 'All India Federation of Deaf', location: 'Delhi, India', website: 'https://www.aifdw.com' },
+    { id: '3', title: 'Accessibility Consultant', description: 'Enable India', location: 'Bengaluru, India', website: 'https://www.enableindia.org' }
 ];
 
 export default function OpportunitiesScreen() {
@@ -31,8 +32,11 @@ export default function OpportunitiesScreen() {
   const renderJobItem = ({ item }: { item: Job }) => (
     <TouchableOpacity style={styles.jobItem}>
       <Text style={styles.jobTitle}>{item.title}</Text>
-      <Text style={styles.jobCompany}>{item.company}</Text>
+      <Text style={styles.jobCompany}>{item.description}</Text>
       <Text style={styles.jobLocation}>{item.location}</Text>
+      <TouchableOpacity onPress={() => Linking.openURL(item.website)}>
+        <Text style={styles.jobWebsite}>{item.website}</Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
@@ -108,6 +112,11 @@ const styles = StyleSheet.create({
   jobLocation: {
     fontSize: 14,
     color: '#666',
+  },
+  jobWebsite: {
+    fontSize: 14,
+    color: '#007AFF',
+    textDecorationLine: 'underline',
   },
   
   bottomNav: {

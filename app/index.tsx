@@ -1,4 +1,12 @@
-import SignUpScreen from '../screens/SignUpScreen';
+import React from 'react';
+import { Redirect } from 'expo-router';
+import { useAuth } from '../contexts/AuthContext';
+
 export default function Index() {
-  return <SignUpScreen />;
+  const { user } = useAuth();
+  if (user) {
+    return <Redirect href="/home" />;
+  }
+
+  return <Redirect href="/login" />;
 }

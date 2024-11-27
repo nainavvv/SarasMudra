@@ -34,11 +34,10 @@ const DictionaryIcon = () => (
   <Text style={{fontSize: 24}}>📖</Text>
 );
 const ngos: NGO[] = [
-  { id: '1', name: 'Deaf Aid Society', address: '123 Main St, City', phone: '+1234567890', website: 'https://deafaidsociety.org' },
-  { id: '2', name: 'Sign Language Association', address: '456 Elm St, Town', phone: '+9876543210', website: 'https://signlanguageassociation.org' },
-  { id: '3', name: 'Hearing Impaired Support', address: '789 Oak St, Village', phone: '+1122334455', website: 'https://hearingimpairedsupport.org' },
-];
-
+    { id: '1', name: 'All India Deaf and Dumb Society', address: 'Plot No. 4 & 7, Industrial Area, Kadkadi Mode, Delhi-110092', phone: '_', website: 'https://www.deafanddumbsociety.org' },
+    { id: '2', name: 'Sanket Foundation', address: 'R-641, Second Floor, New Rajinder Nagar, New Delhi-60', phone: '+91-8800649977', website: 'https://sanketfoundation.org' },
+    { id: '3', name: 'Suniye', address: 'New Delhi (exact address not listed online)', phone: '_', website: 'https://suniye.in' }
+  ];
 export default function CommScreen() {
   const navigation = useNavigation<NavigationProp>();
   const renderNgoItem = ({ item }: { item: NGO }) => (
@@ -88,7 +87,6 @@ export default function CommScreen() {
   );
 
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

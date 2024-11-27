@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   View,
   Text,
@@ -74,17 +75,11 @@ export default function SignUpScreen() {
       <View style={styles.formContainer}>
         <Text style={styles.title}>Sign Up</Text>
 
-        <View style={styles.inputContainer}>
-          <MaterialCommunityIcons name="email-outline" size={24} color="#000" />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
 
         <View style={styles.inputContainer}>
           <MaterialCommunityIcons name="phone" size={24} color="#000" />
@@ -116,94 +111,81 @@ export default function SignUpScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.loginLink}>Log in</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ScrollView>
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign Up</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push('/login')}>
+        <Text style={styles.linkText}>Already have an account? Log In</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  logoContainer: {
-    backgroundColor: '#FCDA79',
-    padding: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  logoImage: {
-    width: 270,
-    height: 80,
-    resizeMode: 'contain',
-  },
-  formContainer: {
-    flex: 1,
     padding: 20,
+    backgroundColor: '#F5F5F5',
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
     marginBottom: 20,
-    paddingHorizontal: 10,
+    color: '#333',
   },
   input: {
-    flex: 1,
-    paddingVertical: 10,
+    width: '100%',
+    height: 50,
+    borderColor: '#DDD',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 15,
     paddingHorizontal: 10,
-    fontSize: 16,
+    backgroundColor: '#FFF',
   },
-  submitButton: {
-    backgroundColor: '#000',
-    padding: 15,
-    borderRadius: 25,
-    marginTop: 20,
+  button: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#FFE17B',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginBottom: 15,
   },
-  submitButtonText: {
-    color: '#fff',
-    textAlign: 'center',
+  buttonText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: 'bold',
+    color: '#333',
   },
-  socialContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 30,
-    gap: 20,
-  },
-  socialButton: {
-    padding: 10,
-  },
-  socialIcon: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 30,
-  },
-  loginText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  loginLink: {
-    fontSize: 16,
+  linkText: {
     color: '#007AFF',
+    fontSize: 16,
   },
 });
