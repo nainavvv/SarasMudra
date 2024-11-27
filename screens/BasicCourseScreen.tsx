@@ -135,12 +135,7 @@ export default function BasicCourseScreen() {
                 </View>
                 <Text style={[styles.lessonText, !lesson.unlocked && styles.lockedText]}>{lesson.title}</Text>
               </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.quizButton}
-                onPress={() => handleQuizPress(lesson.title)}
-              >
-                <Text style={styles.quizButtonText}>Q</Text>
-              </TouchableOpacity>
+            
             </View>
             {lesson.arrows === 'right' && (
               <>
