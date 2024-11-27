@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "446221996238",
+    "project_id": "signlanguage-d1f52",
+    "storage_bucket": "signlanguage-d1f52.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446221996238:android:24f324c0a3c92a2947409f",
+        "android_client_info": {
+          "package_name": "com.sarasmudra.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446221996238-lrulkucl7i9ss1h24cu11l322dru4qca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXaDkDdGlupAFyfXjWobHiBAvHS2Z76to"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446221996238-lrulkucl7i9ss1h24cu11l322dru4qca.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "446221996238-4r3v7voqtld0do9ighpfffj7rp1dfjtu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sarasmudra.firebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,15 +11,54 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../types/navigation';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import * as Google from 'expo-auth-session/providers/google';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const navigation = useNavigation<NavigationProp>();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    console.log('Submit:', { email, phoneNumber });
-    navigation.navigate('logo');
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: '446221996238-lrulkucl7i9ss1h24cu11l322dru4qca.apps.googleusercontent.com',
+  });
+
+  const handleGoogleLogin = async () => {
+    try {
+      if (response?.type === 'success') {
+        const { id_token } = response.params;
+        const credential = GoogleAuthProvider.credential(id_token);
+        const userCredential = await signInWithCredential(auth, credential);
+        console.log('Google Login Success:', userCredential.user);
+      }
+    } catch (err) {
+      console.error('Google Login Error:', err);
+    }
+  };
+  const handleSubmit = async () => {
+    if(!email || !phoneNumber){
+      setError('Please fill in all fields');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try{
+      const userCredential = await createUserWithEmailAndPassword(auth, email, phoneNumber);
+      console.log('User signed up:', userCredential.user);
+      navigation.navigate('logo');
+    }
+    catch(error: any){
+      console.error('Failed to sign up:', error);
+      setError(error.message);
+    }
+    finally{
+      setLoading(false);
+    }
+    
   };
 
   return (
@@ -63,7 +102,7 @@ export default function SignUpScreen() {
         </TouchableOpacity>
 
         <View style={styles.socialContainer}>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity style={styles.socialButton} onPress={()=>handleGoogleLogin()}>
             <Image
               source={require('../assets/google-icon.png')}
               style={styles.socialIcon}
