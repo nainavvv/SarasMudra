@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sarasmudra.firebase",
+      "bundleIdentifier": "com.sarasmudra.app",
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
@@ -18,7 +18,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sarasmudra.firebase",
+      "package": "com.sarasmudra.app",
       "googleServicesFile": "./google-services.json"
     },
     "web": {
@@ -41,9 +41,7 @@
         "ios":{
           "useFrameworks":"static"
         }
-      }],
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth"
+      }]
     ],
     "experiments": {
       "typedRoutes": true
