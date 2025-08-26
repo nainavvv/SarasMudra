@@ -1,34 +1,19 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { Platform } from 'react-native';
 
-const androidConfig = {
-  apiKey: "AIzaSyDXaDkDdGlupAFyfXjWobHiBAvHS2Z76to",
-  authDomain: "signlanguage-d1f52.firebaseapp.com",
-  projectId: "signlanguage-d1f52",
-  storageBucket: "signlanguage-d1f52.firebasestorage.app",
-  messagingSenderId: "446221996238",
-  appId: "1:446221996238:android:24f324c0a3c92a2947409f",
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
 };
 
-const iosConfig = {
-  apiKey: "AIzaSyDXaDkDdGlupAFyfXjWobHiBAvHS2Z76to",
-  authDomain: "signlanguage-d1f52.firebaseapp.com",
-  projectId: "signlanguage-d1f52",
-  storageBucket: "signlanguage-d1f52.firebasestorage.app",
-  messagingSenderId: "446221996238",
-  appId: "1:446221996238:ios:0815cffe23b5c96a47409f",
-};
-
-let firebaseConfig;
-
-if (Platform.OS === 'android') {
-  firebaseConfig = androidConfig;
-} else if (Platform.OS === 'ios') {
-  firebaseConfig = iosConfig;
-}
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
