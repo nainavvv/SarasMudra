@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,75 +7,117 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationProp } from '../types/navigation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
-import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from 'firebase/auth';
+import { auth, firestore } from '../firebaseConfig'; // Changed to relative path
 import * as Google from 'expo-auth-session/providers/google';
+import { doc, setDoc } from 'firebase/firestore';
+import { useRouter } from 'expo-router';
+
+// Make sure your webClientId is in your .env file
+const webClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const navigation = useNavigation<NavigationProp>();
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: '446221996238-lrulkucl7i9ss1h24cu11l322dru4qca.apps.googleusercontent.com',
+    clientId: webClientId,
   });
 
-  const handleGoogleLogin = async () => {
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      handleGoogleSignIn(credential);
+    }
+  }, [response]);
+
+  const handleGoogleSignIn = async (credential) => {
+    setLoading(true);
+    setError('');
     try {
-      if (response?.type === 'success') {
-        const { id_token } = response.params;
-        const credential = GoogleAuthProvider.credential(id_token);
-        const userCredential = await signInWithCredential(auth, credential);
-        console.log('Google Login Success:', userCredential.user);
-      }
+      const userCredential = await signInWithCredential(auth, credential);
+      console.log('Google Sign-In Success:', userCredential.user);
+
+      // Save user info to Firestore, merge to avoid overwriting existing data
+      await setDoc(
+        doc(firestore, 'users', userCredential.user.uid),
+        {
+          email: userCredential.user.email,
+        },
+        { merge: true }
+      );
+
+      router.push('/logo'); // Navigate to your desired screen after login
     } catch (err) {
-      console.error('Google Login Error:', err);
+      console.error('Google Sign-In Error:', err);
+      setError('Google sign-in failed. Please try again.');
+      Alert.alert('Error', 'Google sign-in failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleSubmit = async () => {
-    if(!email || !phoneNumber){
+    if (!email || !phoneNumber || !password) {
       setError('Please fill in all fields');
       return;
     }
     setLoading(true);
     setError('');
-    try{
-      const userCredential = await createUserWithEmailAndPassword(auth, email, phoneNumber);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       console.log('User signed up:', userCredential.user);
-      navigation.navigate('logo');
-    }
-    catch(error: any){
+
+      // Save additional user info to Firestore
+      await setDoc(doc(firestore, 'users', userCredential.user.uid), {
+        email: email,
+        phoneNumber: phoneNumber,
+      });
+
+      router.push('/logo'); // Navigate after successful sign-up
+    } catch (error) {
       console.error('Failed to sign up:', error);
       setError(error.message);
-    }
-    finally{
+      Alert.alert('Sign-up Failed', error.message);
+    } finally {
       setLoading(false);
     }
-    
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/hands-logo.png')}
+          source={require('../assets/hands-logo.png')} // Make sure you have this asset
           style={styles.logoImage}
         />
-
       </View>
 
       <View style={styles.formContainer}>
         <Text style={styles.title}>Sign Up</Text>
 
         <View style={styles.inputContainer}>
-          <MaterialCommunityIcons name="email-outline" size={24} color="#000" />
+          <MaterialCommunityIcons
+            name="email-outline"
+            size={24}
+            color="#000"
+          />
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -97,20 +139,45 @@ export default function SignUpScreen() {
           />
         </View>
 
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Submit</Text>
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons name="lock-outline" size={24} color="#000" />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+
+        {error ? (
+          <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text>
+        ) : null}
+
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          <Text style={styles.submitButtonText}>
+            {loading ? 'Signing Up...' : 'Submit'}
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.socialContainer}>
-          <TouchableOpacity style={styles.socialButton} onPress={()=>handleGoogleLogin()}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={() => promptAsync()}
+            disabled={loading}
+          >
             <Image
-              source={require('../assets/google-icon.png')}
+              source={require('../assets/google-icon.png')} // Make sure you have this asset
               style={styles.socialIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
             <Image
-              source={require('../assets/facebook-icon.png')}
+              source={require('../assets/facebook-icon.png')} // Make sure you have this asset
               style={styles.socialIcon}
             />
           </TouchableOpacity>
@@ -118,8 +185,8 @@ export default function SignUpScreen() {
 
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Already have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.loginLink} onPress={()=>navigation.navigate('login')}>Log in</Text>
+          <TouchableOpacity onPress={() => router.push('/login')}>
+            <Text style={styles.loginLink}>Log in</Text>
           </TouchableOpacity>
         </View>
       </View>
