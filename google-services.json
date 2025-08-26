@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "121719432203",
+    "project_id": "sarasmudra",
+    "storage_bucket": "sarasmudra.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121719432203:android:ded1cba681f9a0ac47530e",
+        "android_client_info": {
+          "package_name": "com.sarasmudra.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121719432203-ptdlfm0kcpacal2oenntvmvfgde75bd4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sarasmudra.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "121719432203-cj0vrakom89atv52oac66bie8pc4equc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBFuLATBdIJmBUmvasTakmwfOxwlK6GCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121719432203-cj0vrakom89atv52oac66bie8pc4equc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "121719432203-ma4vh76nmae79p9q2vkf38eabb8nqr0u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sarasmudra.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
