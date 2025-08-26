@@ -1,29 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationProp } from '../types/navigation';
-import { useAuth } from '../contexts/AuthContext';
-import auth from '@react-native-firebase/auth';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation<NavigationProp>();
-  const { signIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleLogin = async () => {
     if (email === '' || password === '') {
-      Alert.alert('Error', 'Please fill in all fields');
+      Alert.alert('Login Error', 'Please fill in all fields.');
       return;
     }
 
+    setLoading(true);
     try {
-      await auth().signInWithEmailAndPassword(email, password);
-      console.log('User logged in:', email);
-      navigation.navigate('home');
+      // Use the signInWithEmailAndPassword from the Firebase JS SDK
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log('User logged in:', userCredential.user.email);
+      router.push('/home'); // Navigate to home screen on success
     } catch (error) {
       console.error('Error logging in:', error);
-      Alert.alert('Error', 'Failed to log in. Please try again.');
+      // Provide more specific feedback to the user
+      Alert.alert('Login Failed', 'The email or password you entered is incorrect. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,27 +46,31 @@ export default function LoginScreen() {
         style={styles.input}
         placeholder="Email"
         value={email}
-        onChangeText={(text) => {
-          setEmail(text);
-          console.log('Login - Email entered:', text);
-        }}
+        onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        editable={!loading} // Disable input when loading
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-          console.log('Login - Password entered');
-        }}
+        onChangeText={setPassword}
         secureTextEntry
+        editable={!loading} // Disable input when loading
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+        disabled={loading} // Disable button when loading
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color="#333" />
+        ) : (
+          <Text style={styles.buttonText}>Log In</Text>
+        )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('signup')}>
+      <TouchableOpacity onPress={() => router.push('/signup')} disabled={loading}>
         <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
